@@ -22,16 +22,16 @@ import org.bukkit.event.entity.EntityDeathEvent;
  */
 public class Plugin extends JavaPlugin implements Listener {
 
-    double rate = 1.0f;
+    double rate = 1.0f; //storage for the current droprate (where 1.0 is 100%)
 
-    public void reload(boolean message, CommandSender sender) {
-        reloadConfig();
-        rate = getConfig().getDouble("droprate");
-        if (message) {
-            if (sender == null) {
-                getLogger().info("reloaded");
-            } else {
-                sender.sendMessage(ChatColor.GOLD + "TotemDroprate reloaded");
+    public void reload(boolean message, CommandSender sender) { //config reloading with feedback
+        reloadConfig();//reload plugin.getConfig() values from disk
+        rate = getConfig().getDouble("droprate"); //get the configured droprate without the hashmap lookup
+        if (message) {//feedback was requested
+            if (sender == null) {//no receiver for the feedback was provided - print to console
+                getLogger().info("config reloaded");
+            } else {//provide the feedback to the place specified
+                sender.sendMessage(ChatColor.GOLD + "TotemDroprate config reloaded");
             }
         }
     }
@@ -48,21 +48,21 @@ public class Plugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        this.getServer().getPluginManager().registerEvents(this, this);
-        reload(true, null);
+        saveDefaultConfig();//save the default config to disk IF it doesn't already exist
+        this.getServer().getPluginManager().registerEvents(this, this);//register bukkit events with the plugin
+        reload(false, null);//reload onfig if it has not been
         this.getLogger().info("Enabled.");
     }
 
     public void onDeath(EntityDeathEvent evt) {
         Entity entity = evt.getEntity();
-        if (entity instanceof Evoker) {
-            evt.getDrops().removeIf((item) -> {
+        if (entity instanceof Evoker) { //change droprate of evoker items, assuming the current rate is 100%
+            evt.getDrops().removeIf((item) -> { //remove the item IF it's a totem AND it is not within the droprate
                 if (item != null && item.getType() == Material.TOTEM_OF_UNDYING) {
                     double roll = ThreadLocalRandom.current().nextDouble();
-                    return roll >= rate;
+                    return roll >= rate; //the random drop-roll was outside of the droprate range [0,rate)
                 }
-                return false;
+                return false;//don't modify drops when the item doesn't meet our requirements
             });
         }
     }
