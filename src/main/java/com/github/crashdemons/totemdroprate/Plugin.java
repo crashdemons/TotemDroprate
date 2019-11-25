@@ -35,14 +35,14 @@ public class Plugin extends JavaPlugin implements Listener {
             }
         }
     }
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!cmd.getName().equalsIgnoreCase("totemdropratereload")) return true;//not the command we expected!
-        if(args.length!=0) return false;
+        if (args.length != 0) return false;
         if (sender.hasPermission("totemdroprate.reload")) reload(true, sender);
-        else sender.sendMessage(ChatColor.RED+"You don't have permission to do that.");
-        
+        else sender.sendMessage(ChatColor.RED + "You don't have permission to do that.");
+
         return true;
     }
 
