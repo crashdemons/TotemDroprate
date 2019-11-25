@@ -22,7 +22,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
  */
 public class Plugin extends JavaPlugin implements Listener {
 
-    double rate = 1.0f; //storage for the current droprate (where 1.0 is 100%)
+    volatile double rate = 1.0f; //storage for the current droprate (where 1.0 is 100%)
 
     public void reload(boolean message, CommandSender sender) { //config reloading with feedback
         reloadConfig();//reload plugin.getConfig() values from disk
