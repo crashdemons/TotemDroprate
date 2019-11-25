@@ -1,0 +1,26 @@
+name: ${project.name}
+main: com.github.crashdemons.totemdroprate.Plugin
+version: ${project.version}
+author: crashdemons
+api-version: 1.14
+description: Allows modifying the droprate of totems from evokers
+website: https://github.com/crashdemons/TotemDroprate
+
+#softdepend: [Essentials,EssentialsX,SuperVanish,PremiumVanish]
+
+commands:
+  totemdropratereload:
+    description: reloads configuration settings
+    usage: "Usage: /<command>"
+    aliases: [tdr,tdrreload,totemdroprate]
+    permission: totemdroprate.reload
+
+permissions:
+  totemdroprate.*:
+    description: Gives all TDR permissions
+    default: false
+    children:
+      totemdroprate.reload: true
+  totemdroprate.reload:
+    description: Allows user to run the reload command
+    default: op
